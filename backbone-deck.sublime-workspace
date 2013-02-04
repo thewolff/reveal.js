@@ -11,7 +11,7 @@
 			"file": "index.html",
 			"settings":
 			{
-				"buffer_size": 10752,
+				"buffer_size": 10862,
 				"line_ending": "Windows"
 			}
 		},
@@ -134,7 +134,7 @@
 	},
 	"find_in_files":
 	{
-		"height": 0.0,
+		"height": 90.0,
 		"where_history":
 		[
 		]
@@ -190,15 +190,15 @@
 					"file": "index.html",
 					"settings":
 					{
-						"buffer_size": 10752,
+						"buffer_size": 10862,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								984,
-								984
+								9381,
+								9381
 							]
 						],
 						"settings":
@@ -296,7 +296,7 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 322.0,
+						"translation.y": 3790.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
