@@ -146,6 +146,9 @@ var todo = { description: 'Pick up milk', status: 'incomplete', id: 1 };
   Pick up milk
 &lt;/h3&gt;
 					</code></pre>
+					<ul>
+						<li class="fragment">Likely to get real ugly, real fast</li>
+					</ul>
 					</section>
 					<section>
 						<h2>Backbone.js Model</h2>
@@ -199,47 +202,6 @@ define([
 							<li class="fragment">Use <code>.update()</code> to sync entire collections with server</li>
 						</ul>
 					</section>
-					<section>
-						<h2>Backbone.js Collection</h2>
-						<pre><code contenteditable>
-define([
-	'underscore',
-	'backbone',
-	'backboneLocalstorage',
-	'models/todo'
-], function( _, Backbone, Store, Todo ) {
-
-	var TodosCollection = Backbone.Collection.extend({
-		model: Todo,
-		localStorage: new Store('todos-backbone'),
-
-		completed: function() {
-			return this.filter(function( todo ) {
-				return todo.get('completed');
-			});
-		},
-
-		remaining: function() {
-			return this.without.apply( this, this.completed() );
-		},
-
-		nextOrder: function() {
-			if ( !this.length ) {
-				return 1;
-			}
-			return this.last().get('order') + 1;
-		},
-
-		comparator: function( todo ) {
-			return todo.get('order');
-		}
-	});
-
-	return new TodosCollection();
-});
-
-						</code></pre>
-					</section>
 				</section>
 				<section>
 					<section>
@@ -252,7 +214,6 @@ define([
 							<li class="fragment">Apps typically consist of a main app view and individual views for important models/collections</li>
 							<li class="fragment">All views have a DOM element reference via <code>el</code></li>
 							<li class="fragment"><code>el</code> can be assigned to an existing element or created newly via the framework</li>
-							<li class="fragment"></li>
 						</ul>
 					</section>
 					<section>
@@ -287,101 +248,6 @@ define([
 							<li class="fragment">Supports common DOM event-types: <code>click</code>, <code>submit</code>, <code>mouseover</code>, <code>dblclick</code>, and more</li>
 							<li class="fragment">Backbone makes sure that <code>this</code> always refers to the current view object so you don't have to</li>
 						</ul>
-					</section>
-<section>
-						<h2>Backbone.js View</h2>
-						<pre><code contenteditable>
-define([
-	'jquery',
-	'underscore',
-	'backbone',
-	'text!templates/todos.html',
-	'common'
-], function( $, _, Backbone, todosTemplate, Common ) {
-
-var TodoView = Backbone.View.extend({
-
-		tagName:  'li',
-
-		template: _.template( todosTemplate ),
-
-		// The DOM events specific to an item.
-		events: {
-			'click .toggle':	'toggleCompleted',
-			'dblclick label':	'edit',
-			'click .destroy':	'clear',
-			'keypress .edit':	'updateOnEnter',
-			'blur .edit':		'close'
-		},
-
-	initialize: function() {
-		this.listenTo(this.model, 'change', this.render);
-		this.listenTo(this.model, 'destroy', this.remove);
-		this.listenTo(this.model, 'visible', this.toggleVisible);
-	},
-
-// Re-render the titles of the todo item.
-	render: function() {
-		this.$el.html( this.template( this.model.toJSON() ) );
-		this.$el.toggleClass( 'completed', this.model.get('completed') );
-
-		this.toggleVisible();
-		this.$input = this.$('.edit');
-		return this;
-	},
-
-	toggleVisible: function() {
-		this.$el.toggleClass( 'hidden',  this.isHidden());
-	},
-
-	isHidden: function() {
-		var isCompleted = this.model.get('completed');
-		return ( // hidden cases only
-			(!isCompleted && Common.TodoFilter === 'completed')
-			|| (isCompleted && Common.TodoFilter === 'active')
-		);
-	},
-
-// Toggle the 
-	toggleCompleted: function() {
-		this.model.toggle();
-	},
-
-	// Switch this view into '"editing"' mode, displaying the input field.
-	edit: function() {
-		this.$el.addClass('editing');
-		this.$input.focus();
-	},
-
-// Close the '"editing"' mode, saving changes to the todo.
-	close: function() {
-		var value = this.$input.val().trim();
-
-		if ( value ){
-			this.model.save({ title: value });
-		} else {
-			this.clear();
-		}
-
-		this.$el.removeClass('editing');
-	},
-
-// If you hit 'enter', we're through editing the item.
-	updateOnEnter: function( e ) {
-		if ( e.keyCode === Common.ENTER_KEY ) {
-			this.close();
-		}
-	},
-
-// Remove the item, destroy the model from *localStorage* and delete its view.
-	clear: function() {
-		this.model.destroy();
-	}
-});
-
-return TodoView;
-});
-						</code></pre>
 					</section>
 				</section>
 				<section>
